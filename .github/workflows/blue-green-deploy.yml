@@ -16,21 +16,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout del repositorio
+      - name: 📂 Checkout del repositorio
         uses: actions/checkout@v4
 
-      - name: 🛠 Configurar Node.js
+      - name: 🔧 Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
       - name: 📦 Instalar dependencias (si existen)
-        run: npm install || echo "No hay dependencias que instalar"
+        run: npm install || echo "No hay dependencias"
 
-      - name: 🏗 Construir el sitio (si es necesario)
+      - name: 🏗️ Construir el sitio (si es necesario)
         run: echo "No hay build necesario"
 
-      - name: 📂 Subir archivos al artefacto
+      - name: 📤 Subir archivos al artefacto
         uses: actions/upload-pages-artifact@v2
         with:
           path: "."
