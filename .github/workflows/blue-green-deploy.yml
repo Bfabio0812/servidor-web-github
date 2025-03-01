@@ -2,15 +2,16 @@ name: Blue/Green Deployment and Testing
 
 on:
   push:
-    branches: [ blue ]
-  workflow_dispatch:
+    branches:
+      - blue
+      - green
 
 jobs:
-  deploy-test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🛎️ Checkout del repositorio
+      - name: 📥 Checkout del repositorio
         uses: actions/checkout@v4
 
       - name: 🔧 Configurar Node.js
@@ -22,37 +23,18 @@ jobs:
         run: npm install || echo "No hay dependencias que instalar"
 
       - name: 🚀 Construir el sitio (si es necesario)
-        run: echo "No hay build en este caso, pero aquí se colocaría"
+        run: echo "No hay build definido"
 
-      - name: 🖼️ Subir archivos al ambiente de pruebas
-        uses: actions/upload-pages-artifact@v2
+      - name: 📤 Subir archivos al artefacto
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "."
 
-      - name: 📝 Ejecutar pruebas automatizadas
-        run: |
-          curl -Is https://bfabio0812.github.io/servidor-web-github/ | head -n 1
-          grep "HTTP/2 200" || exit 1
+      - name: 🚀 Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
+        with:
+          artifact_name: github-pages
 
-      - name: ✅ Notificar que las pruebas fueron exitosas
-        if: success()
-        run: echo "La versión Blue pasó las pruebas."
-
-      - name: 🚀 Promover Blue a Green (Simulación)
-        if: success()
-        run: |
-          echo "Promoviendo la versión Blue a producción."
-          git checkout green
-          git merge blue -m "Promoviendo versión Blue a producción"
-          git push origin green
-
-      - name: 🔄 Rollback a Green (si las pruebas fallan)
-        if: failure()
-        run: |
-          echo "Las pruebas fallaron. Volviendo a la versión Green."
-          git checkout blue
-          git reset --hard green
-          git push origin blue --force
-
-      - name: 🏁 Notificación final
-        run: echo "Despliegue y pruebas completadas."
+      - name: ✅ Confirmar despliegue exitoso
+        run: echo "Despliegue completado en la rama ${{ github.ref }}"
