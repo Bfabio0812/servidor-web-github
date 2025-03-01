@@ -6,6 +6,11 @@ on:
       - blue
       - green
 
+permissions:
+  id-token: write
+  pages: write
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -14,7 +19,7 @@ jobs:
       - name: 📥 Checkout del repositorio
         uses: actions/checkout@v4
 
-      - name: 🔧 Configurar Node.js
+      - name: 🛠 Configurar Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
@@ -22,19 +27,17 @@ jobs:
       - name: 📦 Instalar dependencias (si existen)
         run: npm install || echo "No hay dependencias que instalar"
 
-      - name: 🚀 Construir el sitio (si es necesario)
-        run: echo "No hay build definido"
+      - name: 🏗 Construir el sitio (si es necesario)
+        run: echo "No hay build necesario"
 
-      - name: 📤 Subir archivos al artefacto
-        uses: actions/upload-pages-artifact@v3
+      - name: 📂 Subir archivos al artefacto
+        uses: actions/upload-pages-artifact@v2
         with:
           path: "."
 
       - name: 🚀 Desplegar en GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v2
-        with:
-          artifact_name: github-pages
 
       - name: ✅ Confirmar despliegue exitoso
-        run: echo "Despliegue completado en la rama ${{ github.ref }}"
+        run: echo "¡Despliegue completado con éxito!"
