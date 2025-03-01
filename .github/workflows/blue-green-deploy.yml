@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📂 Checkout del repositorio
+      - name: 📥 Checkout del repositorio
         uses: actions/checkout@v4
 
       - name: 🔧 Configurar Node.js
@@ -27,8 +27,8 @@ jobs:
       - name: 📦 Instalar dependencias (si existen)
         run: npm install || echo "No hay dependencias"
 
-      - name: 🏗️ Construir el sitio (si es necesario)
-        run: echo "No hay build necesario"
+      - name: 🏗 Construir el sitio (si es necesario)
+        run: echo "No build necesario"
 
       - name: 📤 Subir archivos al artefacto
         uses: actions/upload-pages-artifact@v2
