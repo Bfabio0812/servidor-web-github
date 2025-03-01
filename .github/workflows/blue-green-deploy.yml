@@ -1,0 +1,41 @@
+name: Blue-Green Deployment
+
+on:
+  push:
+    branches:
+      - blue
+      - green
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: 🛠 Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: 📂 Configurar GitHub Pages
+        uses: actions/configure-pages@v3
+
+      - name: 📦 Instalar dependencias (si es necesario)
+        run: npm install || echo "No se requieren dependencias"
+
+      - name: 🚀 Construir el sitio (si es necesario)
+        run: echo "No hay build necesaria, solo archivos estáticos"
+
+      - name: 📤 Subir archivos a GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+
+      - name: 🚀 Desplegar en GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: ✅ Confirmar despliegue exitoso
+        run: echo "Despliegue completado en la rama ${{ github.ref }}"
